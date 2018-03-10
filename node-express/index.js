@@ -4,6 +4,8 @@ const morgan = require ('morgan');
 const bodyParser = require ('body-parser');
 
 const dishRouter = require('./routes/dishRouter');
+const promoRouter = require('./routes/promoRouter');
+const leaderRouter = require('./routes/leaderRouter');
 const hostname = 'localhost';
 const port = 3000;
 
@@ -12,6 +14,8 @@ app.use(morgan('dev'));
 app.use(bodyParser.json()); // Parse body of request msg which is in json format
 
 app.use('/dishes' , dishRouter);
+app.use('/promotions' , promoRouter);
+app.use('/leaders' , leaderRouter);
 
 // Any request coming to this end point will be handled by dishRouter
 const server = http.createServer(app);
