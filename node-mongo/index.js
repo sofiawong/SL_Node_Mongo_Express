@@ -7,6 +7,7 @@ const url = 'mongodb://localhost:27017/conFusion';
 
 // db.collection is not a function, https://stackoverflow.com/questions/43779323/typeerror-db-collection-is-not-a-function
 // https://mongodb.github.io/mongo-csharp-driver/2.5/apidocs/html/M_MongoDB_Driver_MongoCollection_Drop.htm
+//https://stackoverflow.com/questions/19498650/how-to-drop-collection-from-database-in-mongodb-using-mongo-db-java-driver
 MongoClient.connect(url, (err, client) => {
   const conFusionDatabase = client.db('myDatabaseNameAsAString');
   assert.equal(err, null);
