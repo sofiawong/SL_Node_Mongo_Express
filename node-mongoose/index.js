@@ -10,20 +10,31 @@ const connect = mongoose.connect(url);
 connect.then((db) => {
   console.log('Connected correctly to server');
 
-  const newDish = Dishes({
+  Dishes.create({
     name: 'James',
     description: 'test',
-  });
-
-  newDish.save()
+  })
     .then((dish) => {
       console.log(dish);
-      return Dishes.find({}).exec();
+      return Dishes.findByIdAndUpdate(dish._id, {
+        $set: {description: 'Updated test'} 
+    },{new: true} //once update of dish is complete, it will return updated dish back to us
+     );
     })
-    .then((dishes) => {
-      console.log(dishes);
-      return Dishes.collection.drop();
+    .then((dish) => {
+      console.log(dish);
+      dish.comments.push({
+        rating: 5,
+        comment: 'I\'m getting a sinking feeling',
+        author: 'Leonardo di Carpaccio'
+      });
+      // return Dishes.collection.drop();
+      return dish.save();
       // reference: https://stackoverflow.com/questions/11453617/mongoose-js-remove-collection-or-db
+    })
+    .then((dish) => {
+      console.log(dish);
+      return Dishes.collection.drop();
     })
     .then(() => {
       return mongoose.connection.close();
