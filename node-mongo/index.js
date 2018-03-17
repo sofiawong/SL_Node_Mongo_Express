@@ -9,7 +9,7 @@ const url = 'mongodb://localhost:27017/conFusion';
 // https://mongodb.github.io/mongo-csharp-driver/2.5/apidocs/html/M_MongoDB_Driver_MongoCollection_Drop.htm
 // https://stackoverflow.com/questions/19498650/how-to-drop-collection-from-database-in-mongodb-using-mongo-db-java-driver
 MongoClient.connect(url).then((client) => {
-  const conFusionDatabase = client.db('myDatabaseNameAsAString');
+  const conFusionDatabase = client.db('conFusion');
   //assert.equal(err, null);
 
   console.log('Connected correctly to server');
