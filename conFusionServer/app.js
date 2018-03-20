@@ -11,6 +11,17 @@ const dishRouter = require('./routes/dishRouter');
 const leaderRouter = require('./routes/leaderRouter');
 const promoRouter = require('./routes/promoRouter');
 
+const mongoose = require('mongoose');
+mongoose.Promise = require('bluebird');
+
+const Dishes = require('./models/dishes');
+
+const url = 'mongodb://localhost:27017/conFusionServer';
+const connect = mongoose.connect(url);
+
+connect.then((db) => {
+  console.log('Connected to the server');
+}, (err) => { console.log(err); });
 const app = express();
 
 // view engine setup
@@ -28,7 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 app.use('/dishes', dishRouter);
-app.use('/leaders' , leaderRouter);
+app.use('/leaders', leaderRouter);
 app.use('/promotions', promoRouter);
 
 // catch 404 and forward to error handler
