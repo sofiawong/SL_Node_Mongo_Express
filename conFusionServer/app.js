@@ -36,6 +36,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 //app.use(cookieParser('12345-67890-09876-54321'));
+
 app.use(session({
   name: 'session-id',
   secret: '12345-67890-09876-54321',
@@ -43,41 +44,24 @@ app.use(session({
   resave: false,
   store: new FileStore(),
 }));
-function auth(req, res, next) {
+
+app.use('/', index);
+app.use('/users', users);
+
+function auth (req, res, next) {
   console.log(req.session);
 
-  if (!req.session.user)
-  {
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader) {
-      var err = new Error('You are not authenticated');
-      res.setHeader('WWW-Authenticate', 'Basic');
-      err.status = 401;
-      return next(err); 
-    }
-  
-    const authentication = new Buffer(authHeader.split(' ')[1], 'base64').toString().split(':');
-    const user = authentication[0];
-    const pass = authentication[1];
-  
-    if (user === 'admin' && pass === 'password'){
-      req.session.user = 'admin';
-      next(); // pass to next middleware.
-    } else {
-      const err = new Error('You are not authenticated');
-      res.setHeader('WWW-Authenticate', 'Basic');
-      err.status = 401;
-      return next(err);
-    }
-  }
-
-  else {
-    if (req.session.user === 'admin') {
+  if (!req.session.user) {
+    var err = new Error('You are not authenticated');
+    err.status = 403;
+    return next(err); 
+  } else {
+    if (req.session.user === 'authenticated') {
       next();
-    } else {
+    } 
+    else {
       const err = new Error('You are not authenticated');
-      err.status = 401;
+      err.status = 403;
       return next(err);
     }
   }
@@ -86,8 +70,6 @@ function auth(req, res, next) {
 app.use(auth); //before client can access static resources/ or others, the client has to be authorised
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
-app.use('/users', users);
 app.use('/dishes', dishRouter);
 app.use('/leaders', leaderRouter);
 app.use('/promotions', promoRouter);
